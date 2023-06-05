@@ -1,7 +1,7 @@
+import styled from '@emotion/styled';
+
 import { ModernNormalize } from 'emotion-modern-normalize';
 import { GlobalStyle } from 'GlobalStyles';
-
-import styled from '@emotion/styled';
 
 import Searchbar from './Searchbar';
 

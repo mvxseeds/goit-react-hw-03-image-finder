@@ -1,0 +1,9 @@
+import { LoadMoreBtn } from "./ImageGalleryItem.styled";
+
+const Button = () => {
+    return (
+        <LoadMoreBtn>Load more</LoadMoreBtn>
+    );
+};
+
+export default Button;

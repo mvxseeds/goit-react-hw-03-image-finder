@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-// import { Form, Field } from 'formik';
+import { Form, Field } from 'formik';
 
 export const Header = styled.header`
   top: 0;
@@ -62,7 +62,7 @@ export const ButtonLabel = styled.span`
   border: 0;
 `;
 
-// styled(Input)
+// styled(Field)
 export const Input = styled.input`
   display: inline-block;
   width: 100%;
