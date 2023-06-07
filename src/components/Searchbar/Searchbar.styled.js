@@ -20,8 +20,7 @@ export const Header = styled.header`
     0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
 `;
 
-// styled(Form)
-export const SearchForm = styled.form`
+export const SearchForm = styled(Form)`
   display: flex;
   align-items: center;
   width: 100%;
@@ -62,8 +61,7 @@ export const ButtonLabel = styled.span`
   border: 0;
 `;
 
-// styled(Field)
-export const Input = styled.input`
+export const Input = styled(Field)`
   display: inline-block;
   width: 100%;
   font: inherit;
