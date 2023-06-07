@@ -1,6 +1,6 @@
 import { RotatingLines } from 'react-loader-spinner';
 
-const Button = () => {
+const Loader = () => {
   return (
     <RotatingLines
       strokeColor="#3f51b5"
@@ -12,4 +12,4 @@ const Button = () => {
   );
 };
 
-export default Button;
+export default Loader;

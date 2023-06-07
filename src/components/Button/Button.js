@@ -1,4 +1,4 @@
-import { LoadMoreBtn } from "./ImageGalleryItem.styled";
+import { LoadMoreBtn } from "./Button.styled";
 
 const Button = () => {
     return (

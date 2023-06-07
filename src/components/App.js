@@ -1,41 +1,29 @@
-import styled from '@emotion/styled';
-
-import {
-    ModernNormalize
-}
-from 'emotion-modern-normalize';
-import {
-    Component
-}
-from 'react';
-import {
-    GlobalStyle
-}
-from 'GlobalStyles';
+import { ModernNormalize } from 'emotion-modern-normalize';
+import { Component } from 'react';
+import { GlobalStyle } from 'GlobalStyles';
+import { AppWrapper } from './App.styled';
 
 // import PixabayAPI from '../services/pixabay-api';
 
 import Searchbar from './Searchbar';
-
-const AppWrapper = styled.div `
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-gap: 16px;
-  padding-bottom: 24px;
-`;
+import ImageGallery from './ImageGallery';
+import ImageGalleryItem from './ImageGalleryItem';
+import Loader from './Loader';
+import Button from './Button';
+import Modal from './Modal';
 
 export default class App extends Component {
-    state = {
-		query: "",
-        imgs: null,
-        loading: false,
-    }
-	
-	onSubmitQuery = ({query}) => {
-		this.setState({ query })
-	}
+  state = {
+    query: '',
+    imgs: null,
+    loading: false,
+  };
 
-/*
+  onSubmitQuery = ({ query }) => {
+    this.setState({ query });
+  };
+
+  /*
     componentDidMount() {
         // await PixabayAPI.getImages(searchQuery);
 
@@ -55,20 +43,33 @@ export default class App extends Component {
     }
 */
 
-    render() {
-        return (
-             < AppWrapper > { /* pass props */
-        }
-             < Searchbar onSubmitQuery={this.onSubmitQuery} />
-            { /* working src */
-        }{
-            this.state.loading && ( < h1 > Loading content... <  / h1 > )
-        }{
-            this.state.imgs && ( < div > rendered imgs after fetch + saved to state <  / div > )
-        }
+  render() {
+    return (
+      <AppWrapper>
+        {' '}
+        {/* pass props */}
+        <Searchbar onSubmitQuery={this.onSubmitQuery} />
 
-             < ModernNormalize /  >
-             < GlobalStyle /  >
-             <  / AppWrapper > );
-    }
-};
+        {/* working src */}
+        {this.state.loading && <h1> Loading content... </h1>}
+
+        {/* state machine after components made functional */}
+        {this.state.imgs && (
+          //   <div> rendered imgs after fetch + saved to state </div>
+          <>
+            <ImageGallery>
+              <ImageGalleryItem>
+                {/* is rendered inside disabled or passed as props?
+                    <Modal /> 
+                     */}
+              </ImageGalleryItem>
+            </ImageGallery>
+            <Button />
+          </>
+        )}
+        <ModernNormalize />
+        <GlobalStyle />
+      </AppWrapper>
+    );
+  }
+}
