@@ -15,33 +15,12 @@ import Modal from './Modal';
 export default class App extends Component {
   state = {
     query: '',
-    imgs: null,
-    loading: false,
   };
 
   onSubmitQuery = ({ query }) => {
     this.setState({ query });
   };
 
-  /*
-    componentDidMount() {
-        // await PixabayAPI.getImages(searchQuery);
-
-
-        this.setState({
-            loading: true
-        });
-        setTimeout(() => {
-            fetch('https://pixabay.com/api/?q=cat&key=33013185-bcf0c4849b088c5c00f112ab1&page=1&image_type=photo&orientation=horizontal&per_page=12')
-            .then(res => res.json())
-            .then(imgs => this.setState({imgs}))
-            .finally(() => this.setState({
-                    loading: false
-                }));
-        }, 2000);
-
-    }
-*/
 
   render() {
     return (
@@ -53,11 +32,16 @@ export default class App extends Component {
         {/* working src */}
         {this.state.loading && <h1> Loading content... </h1>}
 
+		
+		<ImageGallery query={this.state.query} />
+
+
         {/* state machine after components made functional */}
         {this.state.imgs && (
           //   <div> rendered imgs after fetch + saved to state </div>
           <>
-            <ImageGallery>
+            <ImageGallery >
+			{/* pass {children} at component --goit-react-hw-02-feedback */}
               <ImageGalleryItem>
                 {/* is rendered inside disabled or passed as props?
                     <Modal /> 
@@ -67,6 +51,8 @@ export default class App extends Component {
             <Button />
           </>
         )}
+		
+		
         <ModernNormalize />
         <GlobalStyle />
       </AppWrapper>
