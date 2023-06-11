@@ -1,9 +1,9 @@
 import { GalleryItem, GalleryItemImage } from "./ImageGalleryItem.styled";
 
-const ImageGalleryItem = ({src="hehe", alt="nothehe"}) => {
+const ImageGalleryItem = ({imageUrl}) => {
     return (
         <GalleryItem>
-            <GalleryItemImage src={src} alt={alt} />
+            <GalleryItemImage src={imageUrl} alt="image-fallback" />
         </GalleryItem>
     );
 };

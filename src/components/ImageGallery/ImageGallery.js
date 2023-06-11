@@ -1,6 +1,9 @@
 import { Component } from 'react';
 import { Gallery } from "./ImageGallery.styled";
 
+import Loader from '../Loader';
+import ImageGalleryItem from '../ImageGalleryItem';
+
 
 export default class ImageGallery extends Component {
 	state = {
@@ -46,14 +49,13 @@ export default class ImageGallery extends Component {
 	
     render() {
 		const { data, error, status } = this.state;
-		const { query } = this.props;
 		
 		if (status ==='idle') {
 			return;
 		}
 		
 		if (status ==='pending') {
-			return <p>Loading gallery...</p>;
+			return <Loader />;
 		}
 		
 		if (status ==='rejected') {
@@ -62,7 +64,13 @@ export default class ImageGallery extends Component {
 		
 		if (status ==='resolved') {
 			return (
-				<p>{data[0].id}</p>
+				<Gallery>
+					{data.map(({id, webformatURL, largeImageURL}) => {
+						return (
+							<ImageGalleryItem key={id} imageUrl={webformatURL} />
+						);
+					})}
+				</Gallery>
 			);
 		}
 	}

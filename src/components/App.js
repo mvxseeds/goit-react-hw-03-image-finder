@@ -7,8 +7,6 @@ import { AppWrapper } from './App.styled';
 
 import Searchbar from './Searchbar';
 import ImageGallery from './ImageGallery';
-import ImageGalleryItem from './ImageGalleryItem';
-import Loader from './Loader';
 import Button from './Button';
 import Modal from './Modal';
 
@@ -29,28 +27,8 @@ export default class App extends Component {
         {/* pass props */}
         <Searchbar onSubmitQuery={this.onSubmitQuery} />
 
-        {/* working src */}
-        {this.state.loading && <h1> Loading content... </h1>}
-
 		
-		<ImageGallery query={this.state.query} />
-
-
-        {/* state machine after components made functional */}
-        {this.state.imgs && (
-          //   <div> rendered imgs after fetch + saved to state </div>
-          <>
-            <ImageGallery >
-			{/* pass {children} at component --goit-react-hw-02-feedback */}
-              <ImageGalleryItem>
-                {/* is rendered inside disabled or passed as props?
-                    <Modal /> 
-                     */}
-              </ImageGalleryItem>
-            </ImageGallery>
-            <Button />
-          </>
-        )}
+		    <ImageGallery query={this.state.query} />
 		
 		
         <ModernNormalize />
