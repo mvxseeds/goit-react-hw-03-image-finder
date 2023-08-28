@@ -1,30 +1,44 @@
 import { Component } from 'react';
-import { Gallery } from "./ImageGallery.styled";
+import { Gallery } from './ImageGallery.styled';
 
 import Loader from '../Loader';
 import ImageGalleryItem from '../ImageGalleryItem';
-
+import Button from '../Button';
+import api from 'services/pixabay-api';
 
 export default class ImageGallery extends Component {
-	state = {
-		data: null,
-		error: null,
-		page: 1,
-		status: 'idle',
-	}
-	
-	componentDidUpdate(prevProps, prevState) {
-		// await PixabayAPI.getImages(searchQuery);
-		
-		const prevQuery = prevProps.query;
-		const nextQuery = this.props.query;
-		const page = this.state.page;
-		
-		if(prevQuery !== nextQuery) {
-			//console.log('Query changed:', prevQuery, ">", nextQuery);
-			
-			this.setState({ status: 'pending' })
-			
+  state = {
+    data: null,
+    error: null,
+    page: 1,
+    status: 'idle',
+  };
+
+  async componentDidUpdate(prevProps, prevState) {
+    const prevQuery = prevProps.query;
+    const nextQuery = this.props.query;
+    const page = this.state.page;
+
+    if (prevQuery !== nextQuery) {
+      //console.log('Query changed:', prevQuery, ">", nextQuery);
+
+      this.setState({ status: 'pending' });
+
+      try {
+        const data = await api.getImages(nextQuery, page);
+        const parsedData = data.map(
+          ({ id, webformatURL, largeImageURL }) => {
+            return { id, webformatURL, largeImageURL };
+          }
+        );
+
+        this.setState({ data: parsedData, status: 'resolved' });
+      } catch (error) {
+        this.setState({ error, status: 'rejected' });
+      }
+    }
+
+    /* // FETCH API SAMPLE
 			// temp timeout to display loading interface
 			setTimeout(() => {
 				fetch(`https://pixabay.com/api/?q=${nextQuery}&key=33013185-bcf0c4849b088c5c00f112ab1&page=${page}&image_type=photo&orientation=horizontal&per_page=12`)
@@ -45,34 +59,41 @@ export default class ImageGallery extends Component {
 				.catch(error => this.setState({ error, status: 'rejected' }));
 			}, 1000)
 		}
-	};
-	
-    render() {
-		const { data, error, status } = this.state;
-		
-		if (status ==='idle') {
-			return;
-		}
-		
-		if (status ==='pending') {
-			return <Loader />;
-		}
-		
-		if (status ==='rejected') {
-			return <p>{error.message}</p>;
-		}
-		
-		if (status ==='resolved') {
-			return (
-				<Gallery>
-					{data.map(({id, webformatURL, largeImageURL}) => {
-						return (
-							<ImageGalleryItem key={id} imageUrl={webformatURL} />
-						);
-					})}
-				</Gallery>
-			);
-		}
-	}
-};
+*/
+  }
 
+  render() {
+    const { data, error, status } = this.state;
+
+    if (status === 'idle') {
+      return;
+    }
+
+    if (status === 'pending') {
+      return <Loader />;
+    }
+
+    if (status === 'rejected') {
+      return <p>{error.message}</p>;
+    }
+
+    if (status === 'resolved') {
+      return (
+        <>
+          <Gallery>
+            {data.map(({ id, webformatURL, largeImageURL }) => {
+              return (
+                <ImageGalleryItem
+                  key={id}
+                  previewUrl={webformatURL}
+                  imageUrl={largeImageURL}
+                />
+              );
+            })}
+          </Gallery>
+          <Button />
+        </>
+      );
+    }
+  }
+}

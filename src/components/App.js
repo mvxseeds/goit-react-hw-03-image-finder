@@ -8,7 +8,7 @@ import { AppWrapper } from './App.styled';
 import Searchbar from './Searchbar';
 import ImageGallery from './ImageGallery';
 import Button from './Button';
-import Modal from './Modal';
+
 
 export default class App extends Component {
   state = {
@@ -37,3 +37,15 @@ export default class App extends Component {
     );
   }
 }
+
+
+/*
+
+APP TODOs:
+
+#1 galvanize load more btn 
+#2 add modal window +
+#3 rewrite fetch api to axios 
+#4 add prop-types / yup 
+
+*/
