@@ -1,6 +1,7 @@
+
 import axios from 'axios';
 
-axios.defaults.baseURL = 'https://pixabay.com';
+axios.defaults.baseURL = 'http://pixabay.com';
 
 const getImages = async (searchQuery, page=1) => {
   const perPage = 12;
@@ -30,6 +31,30 @@ const getImages = async (searchQuery, page=1) => {
     throw error;
   }
 };
+
+
+/*
+// FETCH API
+
+const getImages = (searchQuery, page=1) => {
+	fetch(`https://pixabay.com/api/?q=${searchQuery}&key=33013185-bcf0c4849b088c5c00f112ab1&page=${page}&image_type=photo&orientation=horizontal&per_page=12`)
+		.then(res => res.json())
+		.then(data => {
+			// processing of empty result: {"total":0,"totalHits":0,"hits":[]}
+			if (data.total === 0) {
+				return Promise.reject(
+					new Error(`No result found for request: ${searchQuery}`),
+				);
+				// this also works:
+				// //throw "ErrorNoResult";
+			}
+			
+			const parsedData = data.hits.map(({id, webformatURL, largeImageURL}) => { return { id, webformatURL, largeImageURL } });
+			this.setState({ data: parsedData, status: 'resolved' })
+		})
+		.catch(error => this.setState({ error, status: 'rejected' }));
+}
+*/
 
 const api = { getImages };
 

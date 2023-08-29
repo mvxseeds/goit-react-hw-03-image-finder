@@ -6,6 +6,7 @@ import ImageGalleryItem from '../ImageGalleryItem';
 import Button from '../Button';
 import api from 'services/pixabay-api';
 
+
 export default class ImageGallery extends Component {
   state = {
     data: null,
@@ -16,22 +17,35 @@ export default class ImageGallery extends Component {
 
   async componentDidUpdate(prevProps, prevState) {
     const prevQuery = prevProps.query;
-    const nextQuery = this.props.query;
+    const query = this.props.query;
+	const prevPage = prevState.page;
     const page = this.state.page;
 
-    if (prevQuery !== nextQuery) {
-      //console.log('Query changed:', prevQuery, ">", nextQuery);
-
+    if (prevQuery !== query) {
+		
       this.setState({ status: 'pending' });
+	  const parsedData = await this.loadImages(query, page);
 	  
-	  const parsedData = await this.loadImages(nextQuery, page);
 	  if (parsedData) {
 		this.setState({ data: parsedData, status: 'resolved' });
 	  }
     }
+	
+	if (prevPage !== page) {
+		
+	  this.setState({ status: 'pending' });
+	  const parsedData = await this.loadImages(query, page);
+	  
+	  if (parsedData) {
+		this.setState(state => ({
+			data: [...state.data, ...parsedData],
+			status: 'resolved'
+		}));
+	  }
+	}
+	
   };
 	
-  // AXIOS API
   async loadImages(query, page) {
 	try {
 	  const data = await api.getImages(query, page);
@@ -47,30 +61,11 @@ export default class ImageGallery extends Component {
 	}  
   };
   
-/* // FETCH API
-		// temp timeout to display loading interface
-		setTimeout(() => {
-			fetch(`https://pixabay.com/api/?q=${nextQuery}&key=33013185-bcf0c4849b088c5c00f112ab1&page=${page}&image_type=photo&orientation=horizontal&per_page=12`)
-			.then(res => res.json())
-			.then(data => {
-				// processing of empty result: {"total":0,"totalHits":0,"hits":[]}
-				if (data.total === 0) {
-					return Promise.reject(
-						new Error(`No result found for request: ${nextQuery}`),
-					);
-					// this also works:
-					// //throw "ErrorNoResult";
-				}
-				
-				const parsedData = data.hits.map(({id, webformatURL, largeImageURL}) => { return { id, webformatURL, largeImageURL } });
-				this.setState({ data: parsedData, status: 'resolved' })
-			})
-			.catch(error => this.setState({ error, status: 'rejected' }));
-		}, 1000)
-	}
-*/
-  
+  onLoadMore() {
+	  this.setState({ page: this.state.page + 1 });
+  }
 
+  
 
   render() {
     const { data, error, status } = this.state;
@@ -101,7 +96,7 @@ export default class ImageGallery extends Component {
               );
             })}
           </Gallery>
-          <Button />
+          <Button onClick={() => this.onLoadMore()}/>
         </>
       );
     }
