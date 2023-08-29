@@ -23,7 +23,7 @@ export default class ImageGallery extends Component {
 
     if (prevQuery !== query) {
 		
-      this.setState({ status: 'pending' });
+      this.setState({ status: 'pending', page: 1 });
 	  const parsedData = await this.loadImages(query, page);
 	  
 	  if (parsedData) {
@@ -32,6 +32,10 @@ export default class ImageGallery extends Component {
     }
 	
 	if (prevPage !== page) {
+	  // replace this + conditional rendering with specific state (resolved - last page) ?
+	  if (page === 'last') {
+	    return;
+	  }
 		
 	  this.setState({ status: 'pending' });
 	  const parsedData = await this.loadImages(query, page);
@@ -49,8 +53,12 @@ export default class ImageGallery extends Component {
   async loadImages(query, page) {
 	try {
 	  const data = await api.getImages(query, page);
+		
+	  if(data.totalHits < page * 12) {
+		this.setState({ page: 'last' });
+	  }
 	  
-	  return data.map(
+	  return data.hits.map(
 			  ({ id, webformatURL, largeImageURL }) => {
 				return { id, webformatURL, largeImageURL };
 			  }
@@ -62,13 +70,12 @@ export default class ImageGallery extends Component {
   };
   
   onLoadMore() {
-	  this.setState({ page: this.state.page + 1 });
+	this.setState({ page: this.state.page + 1 });
   }
 
-  
 
   render() {
-    const { data, error, status } = this.state;
+    const { data, page, error, status } = this.state;
 
     if (status === 'idle') {
       return;
@@ -96,7 +103,7 @@ export default class ImageGallery extends Component {
               );
             })}
           </Gallery>
-          <Button onClick={() => this.onLoadMore()}/>
+          {!(page === 'last') && <Button onClick={() => this.onLoadMore()}/>}
         </>
       );
     }

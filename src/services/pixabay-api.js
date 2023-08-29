@@ -22,10 +22,10 @@ const getImages = async (searchQuery, page=1) => {
       throw new Error(
         'Sorry, there are no images matching your search query. Please try again.'
       );
-    } else if (response.data.totalHits < page * perPage) {
-      throw new Error("We're sorry, but you've reached the end of search results.");
+    // } else if (response.data.totalHits < page * perPage) {
+    //   throw new Error("We're sorry, but you've reached the end of search results.");
     } else {
-      return response.data.hits;
+      return response.data;
     }
   } catch (error) {
     throw error;
