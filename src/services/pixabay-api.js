@@ -18,20 +18,16 @@ const getImages = async (searchQuery, page=1) => {
     });
 
     if (response.data.total === 0) {
-      throw 'ErrorNoResult';
+      throw new Error(
+        'Sorry, there are no images matching your search query. Please try again.'
+      );
     } else if (response.data.totalHits < page * perPage) {
-      throw 'ErrorOutOfRange';
+      throw new Error("We're sorry, but you've reached the end of search results.");
     } else {
       return response.data.hits;
     }
   } catch (error) {
-    if ('ErrorNoResult') {
-      new Error(
-        'Sorry, there are no images matching your search query. Please try again.'
-      );
-    } else if ('ErrorOutOfRange') {
-      new Error("We're sorry, but you've reached the end of search results.");
-    }
+    throw error;
   }
 };
 
