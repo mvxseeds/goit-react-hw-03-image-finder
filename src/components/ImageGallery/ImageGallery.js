@@ -23,46 +23,53 @@ export default class ImageGallery extends Component {
       //console.log('Query changed:', prevQuery, ">", nextQuery);
 
       this.setState({ status: 'pending' });
-  // AXIOS API
-      try {
-        const data = await api.getImages(nextQuery, page);
-        const parsedData = data.map(
-          ({ id, webformatURL, largeImageURL }) => {
-            return { id, webformatURL, largeImageURL };
-          }
-        );
-
-        this.setState({ data: parsedData, status: 'resolved' });
-      } catch (error) {
-        this.setState({ error, status: 'rejected' });
-      }
+	  
+	  const parsedData = await this.loadImages(nextQuery, page);
+	  if (parsedData) {
+		this.setState({ data: parsedData, status: 'resolved' });
+	  }
     }
+  };
 	
+  // AXIOS API
+  async loadImages(query, page) {
+	try {
+	  const data = await api.getImages(query, page);
+	  
+	  return data.map(
+			  ({ id, webformatURL, largeImageURL }) => {
+				return { id, webformatURL, largeImageURL };
+			  }
+			);
 	
-
-  /* // FETCH API
-			// temp timeout to display loading interface
-			setTimeout(() => {
-				fetch(`https://pixabay.com/api/?q=${nextQuery}&key=33013185-bcf0c4849b088c5c00f112ab1&page=${page}&image_type=photo&orientation=horizontal&per_page=12`)
-				.then(res => res.json())
-				.then(data => {
-					// processing of empty result: {"total":0,"totalHits":0,"hits":[]}
-					if (data.total === 0) {
-						return Promise.reject(
-							new Error(`No result found for request: ${nextQuery}`),
-						);
-						// this also works:
-						// //throw "ErrorNoResult";
-					}
-					
-					const parsedData = data.hits.map(({id, webformatURL, largeImageURL}) => { return { id, webformatURL, largeImageURL } });
-					this.setState({ data: parsedData, status: 'resolved' })
-				})
-				.catch(error => this.setState({ error, status: 'rejected' }));
-			}, 1000)
-		}
-  */
-  }
+	} catch (error) {
+		this.setState({ error, status: 'rejected' });
+	}  
+  };
+  
+/* // FETCH API
+		// temp timeout to display loading interface
+		setTimeout(() => {
+			fetch(`https://pixabay.com/api/?q=${nextQuery}&key=33013185-bcf0c4849b088c5c00f112ab1&page=${page}&image_type=photo&orientation=horizontal&per_page=12`)
+			.then(res => res.json())
+			.then(data => {
+				// processing of empty result: {"total":0,"totalHits":0,"hits":[]}
+				if (data.total === 0) {
+					return Promise.reject(
+						new Error(`No result found for request: ${nextQuery}`),
+					);
+					// this also works:
+					// //throw "ErrorNoResult";
+				}
+				
+				const parsedData = data.hits.map(({id, webformatURL, largeImageURL}) => { return { id, webformatURL, largeImageURL } });
+				this.setState({ data: parsedData, status: 'resolved' })
+			})
+			.catch(error => this.setState({ error, status: 'rejected' }));
+		}, 1000)
+	}
+*/
+  
 
 
   render() {
